@@ -12,10 +12,10 @@
 }
 
 .cm-top-nav-bar {
-    background-color: #004578 !important;
+    background-color: #212121 !important;
     margin-bottom: 0px;
     border: 0px;
-    height:48px;
+    height: 48px;
     border-radius: 0;
 }
 
@@ -359,4 +359,43 @@ a.cm-dropdown-option {
 }
 .red-star {
     color: red;
+}
+
+.custom-card {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.intro {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.description {
+    font-size: large;
+    margin-top: 10px;
+    color: #666;
+}
+
+.purchase-info {
+    margin-top: 20px;
+}
+
+    .purchase-info ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .purchase-info li {
+        margin-bottom: 5px;
+    }
+
+        .purchase-info li b {
+            color: #007bff;
+        }
+
+.list-group-item {
+    background-color: transparent !important;
 }
