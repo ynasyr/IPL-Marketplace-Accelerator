@@ -49,7 +49,7 @@ public class SubscriptionService
     /// </summary>
     /// <param name="subscriptionDetail">The subscription detail.</param>
     /// <returns>Subscription Id.</returns>
-    public int AddOrUpdatePartnerSubscriptions(SubscriptionResult subscriptionDetail, int customerUserId = 0)
+        public int AddOrUpdatePartnerSubscriptions(SubscriptionResult subscriptionDetail, int customerUserId = 0)
     {
         var isActive = this.IsSubscriptionDeleted(Convert.ToString(subscriptionDetail.SaasSubscriptionStatus));
         Subscriptions newSubscription = new Subscriptions()
@@ -73,8 +73,8 @@ public class SubscriptionService
             EndDate = subscriptionDetail.Term.EndDate.ToUniversalTime().DateTime
         };
         return this.subscriptionRepository.Save(newSubscription);
-    }
-
+    }   
+    
     /// <summary>
     /// Binds the subscriptions.
     /// </summary>

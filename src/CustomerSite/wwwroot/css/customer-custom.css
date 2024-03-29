@@ -374,7 +374,7 @@ a.cm-dropdown-option {
 }
 
 .description {
-    font-size: large;
+    font-size: larger;
     margin-top: 10px;
     color: #666;
 }
@@ -398,4 +398,11 @@ a.cm-dropdown-option {
 
 .list-group-item {
     background-color: transparent !important;
+}
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
 }
