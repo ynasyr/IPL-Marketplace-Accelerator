@@ -12,7 +12,7 @@
 }
 
 .cm-top-nav-bar {
-    background-color: #212121 !important;
+    background-color: #00a3a8 !important;
     margin-bottom: 0px;
     border: 0px;
     height: 48px;
@@ -81,7 +81,6 @@
     font-family: 'Segoe UI', 'sans-serif' !important;
     font-size: 25px;
     background-color: #fff;
-    border-bottom: 4px solid #2180a6;
     text-transform: uppercase;
     margin-bottom: 20px;
     line-height: 40px;
@@ -393,7 +392,7 @@ a.cm-dropdown-option {
     }
 
         .purchase-info li b {
-            color: #007bff;
+            color: #003250;
         }
 
 .list-group-item {
@@ -405,4 +404,17 @@ a.cm-dropdown-option {
     justify-content: center;
     align-items: center;
     height: 50vh;
+}
+
+.btn-primary, .btn-primary:hover, .btn-primary:active, .btn-primary:visited {
+    background-color: #00a3a8 !important;
+    border-radius: 25px;
+    border-style: none;
+}
+.btn-danger, .btn-danger:hover, .btn-danger:active, .btn-danger:visited {
+    border-radius: 25px;
+}
+
+.nav-link {
+    font-size: medium !important;
 }

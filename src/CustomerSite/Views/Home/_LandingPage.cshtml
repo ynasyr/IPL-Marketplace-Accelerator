@@ -6,17 +6,13 @@
 @{
     ViewData["Title"] = "Home";
 }
-<div class="d-flex justify-content-center mt-4">
-    <img src="./ekara_colors_logo.png" style="height: auto;" />
-</div>
+
 @if (!Model.ShowWelcomeScreen)
 {
     <div class="container" id="divHome">
 
         <form class="needs-validation" method="post" id="frmIndex">
-            <div class="text-white mt-4">
-                <span class="cm-section-heading">Tell Us About Yourself</span>
-            </div>
+ 
             @if (Model != null && !string.IsNullOrEmpty(Model.ErrorMessage))
             {
                 <div class="alert alert-danger">
@@ -30,7 +26,68 @@
                     <div class="row justify-content-center">
                         <div class="col-md-6">
                             <div class="text-center">
+                                <div class="text-white mt-4">
+                                    @if (Model.SubscriptionStatus == SubscriptionStatusEnumExtension.PendingFulfillmentStart)
+                                    {
+                                        <span class="cm-section-heading">Tell Us About Yourself</span>
+
+                                    }
+                                    @if (Model.SubscriptionStatus == SubscriptionStatusEnumExtension.Subscribed)
+                                    {
+                                        <span class="cm-section-heading">Subscription Details</span>
+                                    }
+                                </div>
                                 <div class="cm-panel-default mt20">
+                                    @if (Model.SubscriptionStatus != SubscriptionStatusEnumExtension.PendingFulfillmentStart) {
+
+                                         <dl class="row text-left">
+                                        <dt class="col-sm-3 p-2 p10">
+                                            @Html.DisplayName("ID ")
+                                        </dt>
+                                        <dd class="col-sm-9 p-2 p10">
+                                            @Html.DisplayFor(model => model.Id)
+                                        </dd>
+                                        <dt class="col-sm-3 p-2 p10">
+                                            @Html.DisplayName("Name ")
+                                        </dt>
+                                        <dd class="col-sm-9 p-2">
+                                            @Html.DisplayFor(model => model.Name)
+                                        </dd>
+                                        <dt class="col-sm-3 p-2 p10">
+                                            @Html.DisplayName("Status ")
+                                        </dt>
+                                        <dd class="col-sm-9 p-2 p10">
+                                            @Html.DisplayFor(model => model.SubscriptionStatus)
+                                        </dd>
+                                        <dt class="col-sm-3 p-2 p10">
+                                            @Html.DisplayName("Offer Name ")
+                                        </dt>
+                                        <dd class="col-sm-9 p-2 p10">
+                                            @Html.DisplayFor(model => model.OfferId)
+                                        </dd>
+                                        <dt class="col-sm-3 p-2 p10">
+                                            @Html.DisplayName("Plan ")
+                                        </dt>
+                                        <dd class="col-sm-9 p-2 p10">
+                                            @Html.DisplayFor(model => model.PlanId)
+                                        </dd>
+                                            <dt class="col-sm-3 p-2 p10">
+                                                @Html.DisplayName("Purchaser Email ")
+                                            </dt>
+                                            <dd class="col-sm-9 p-2 p10">
+                                                @Html.DisplayFor(model => model.Purchaser.EmailId)
+                                                @Html.HiddenFor(model => model.Purchaser.EmailId)
+                                            </dd>
+
+                                            <dt class="col-sm-3 p-2 p10">
+                                                @Html.DisplayName("Azure Tenant ID ")
+                                            </dt>
+                                            <dd class="col-sm-9 p-2 p10">
+                                                @Html.DisplayFor(model => model.Purchaser.TenantId)
+                                                @Html.HiddenFor(model => model.Purchaser.TenantId)
+                                            </dd>
+                                        </dl>
+                                    }
 
                                     @if (Model.SubscriptionParameters != null && Model.SubscriptionParameters.Count() > 0)
                                     {
@@ -60,7 +117,7 @@
                                             }
                                             else
                                             {
-                                                @if (Model.SubscriptionParameters[i].Type.ToLower() == "input")
+                                                @if (false & Model.SubscriptionParameters[i].Type.ToLower() == "input")
                                                 {
                                                     <dt class="col-sm-3 p-2 p10 @Model.SubscriptionParameters[i].Type">
                                                         @Html.DisplayFor(model => model.SubscriptionParameters[i].DisplayName)
@@ -125,7 +182,8 @@
                                             }
                                             else
                                             {
-                                                @if (Model.SubscriptionParameters[i].Type.ToLower() == "input")
+                                                //@if (Model.SubscriptionParameters[i].Type.ToLower() == "input")
+                                                    @if (false & Model.SubscriptionParameters[i].Type.ToLower() == "input")
                                                 {
                                                     <dd class="col-sm-9 p-2 p10  @Model.SubscriptionParameters[i].Type">
                                                         @Html.DisplayFor(model => model.SubscriptionParameters[i].Value)
@@ -147,8 +205,8 @@
                 <div class="text-end">
                     @if (Model.SubscriptionStatus == SubscriptionStatusEnumExtension.Subscribed)
                     {
-                        <button type="submit" asp-action="SubscriptionOperation" asp-route-subscriptionId="@Model.Id" asp-route-planId="@Model.PlanId" asp-route-operation="Deactivate" class="cm-button-danger text-right">Unsubscribe</button>
-                        <button type="submit" asp-action="Subscriptions" class="btn btn-primary btn-lg" text-end">Go to Subscription List</button>
+                        <button type="submit" asp-action="SubscriptionOperation" asp-route-subscriptionId="@Model.Id" asp-route-planId="@Model.PlanId" asp-route-operation="Deactivate" class="btn btn-danger">Unsubscribe</button>
+                        <button type="submit" asp-action="Subscriptions" class="btn btn-primary" text-end">Go to Subscription List</button>
                     }
                     @if (Model.SubscriptionStatus == SubscriptionStatusEnumExtension.PendingFulfillmentStart && Model.IsAutomaticProvisioningSupported == true)
                     {
@@ -167,16 +225,16 @@
 }
 else
 {
+    <div class="d-flex justify-content-center mt-4">
+    <img src="~/ekara_colors_logo.png" style="height: auto;" />
+</div>
     <div class="pt-5">
-        <h2 class="display-5 fw-bold text-body-emphasis text-center mb-4">
-            The eyes of your users
-        </h2>
         <div class="container center-content">
             <div class="card p-3 custom-card">
                 <div class="text-center">
                     <p class="description">Ekara is a fully hybrid platform, capable of monitoring 100% of existing applications and ensuring the availability and performance of your environment (intranet and internet)</p>
                     <div class="d-grid gap-2 col-2 my-4 mx-auto">
-                        <a class="btn btn-outline-dark btn-lg px-4" href="https://www.ip-label.com/" role="button">Details</a>
+                        <a class="btn btn-primary btn-lg px-4" href="https://www.ip-label.com/" role="button">Details</a>
                     </div>
                     
                 </div>
