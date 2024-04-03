@@ -12,14 +12,14 @@
 }
 
 .cm-top-nav-bar {
-    background-color: #333 !important;
+    background-color: #003250 !important;
     margin-bottom: 0;
     border-radius: 0;
     height: 48px;
 }
 
 .cm-menu-bar {
-    background-color: #333 !important;
+    background-color: #003250 !important;
     margin-top: -142px;
 }
 
@@ -513,3 +513,7 @@ button.navbar-toggler:focus, button.navbar-toggler:hover {
         text-decoration: none;
         cursor: pointer;
     }
+
+.class1 {
+    background-color: #003250 !important
+}
