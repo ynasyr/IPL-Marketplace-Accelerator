@@ -95,8 +95,7 @@
 
                                         for (int i = 0; i < Model.SubscriptionParameters.Count(); i++)
                                         {
-                                            @Html.HiddenFor(model =>
-                                                     model.SubscriptionParameters[i].Id)
+                                            @Html.HiddenFor(model => model.SubscriptionParameters[i].Id)
                                             @Html.HiddenFor(model => model.SubscriptionParameters[i].PlanAttributeId)
                                             @Html.HiddenFor(model => model.SubscriptionParameters[i].ValueType)
                                             @Html.HiddenFor(model => model.SubscriptionParameters[i].PlanId)
@@ -208,10 +207,12 @@
                                                             @Html.TextBoxFor(model => model.SubscriptionParameters[i].Value, new
                                                                 {
                                                                     @class =
-                                                                     @Model.SubscriptionParameters[i].Type + " form-control mb-3",
+                                                                     @Model.SubscriptionParameters[i].Type + " form-control mb-3 needs-validation ",
                                                                     @required = "required",
                                                                     @type =
-                                                                     @Model.SubscriptionParameters[i].Htmltype
+                                                                     @Model.SubscriptionParameters[i].Htmltype,
+                                                                     @id =
+                                                                     string.Format("SubscriptionParameters_{0}", @i)
                                                                 })
                                                         }
                                                         else
@@ -221,7 +222,9 @@
                                                                     @class =
                                                                      @Model.SubscriptionParameters[i].Type + " form-control mb-3",
                                                                     @type =
-                                                                     @Model.SubscriptionParameters[i].Htmltype
+                                                                     @Model.SubscriptionParameters[i].Htmltype,
+                                                                     @id =
+                                                                     string.Format("SubscriptionParameters_{0}", @i)
                                                                 })
                                                         }
 
@@ -250,7 +253,7 @@
                 </div>
 
 
-                <div class="text-end">
+                <div class="text-end mt-4">
                     @if (Model.SubscriptionStatus == SubscriptionStatusEnumExtension.Subscribed)
                     {
                         <button type="submit" asp-action="SubscriptionOperation" asp-route-subscriptionId="@Model.Id"
@@ -317,54 +320,96 @@ else
     </section>
 }
 <script type="text/javascript">
+    function validateInputs() {
+        let isValid = true;
+        $(':input[required]:visible').each(function () {
+            if ($(this).val().trim() === "") {
+                isValid = false;
+                return false; // Break out of the loop early if any field is empty
+            }
+        });
+        return isValid;
+    }
+
+    function validateEmail() {
+        // Check if the input is not empty
+        const email = document.querySelector("#SubscriptionParameters_3").value
+        if (email.trim() === "") {
+            return false;
+        }
+
+        // Use validator.js library to check if the input is a valid email
+        return validator.isEmail(email);
+    }
+
+    async function subscriptionOperation() {
+        try {
+            const formObject = $('#frmIndex').serialize();
+            const csrfToken = $('input[name="__RequestVerificationToken"]').val();
+            const subscriptionId = getSubscriptionId(); // Function to get subscriptionId
+            const planId = getPlanId(); // Function to get planId
+            const operation = getOperation(); // Function to get operation
+
+            const response = await fetch('/Home/SubscriptionOperation', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': csrfToken
+                },
+                body: new URLSearchParams({
+                    ...formObject,
+                    subscriptionId,
+                    planId,
+                    operation
+                }).toString(),
+                cache: 'no-cache'
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch data');
+            }
+
+            const result = await response.text();
+            $('#divIndex').html(result);
+        } catch (error) {
+            console.error(error);
+            $('#divIndex').html('An error occurred.');
+        }
+    }
 
     function SubscriptionOperation(subscriptionId, planId, operation) {
-        if (validate()) {
-            var formobject = $('#frmIndex').serialize();
-            var csrftoken = $('input[name="__RequestVerificationToken"]').val();
-            $.ajax({
-                url: '/Home/SubscriptionOperation',
-                type: 'POST',
-                headers: { RequestVerificationToken: csrftoken },
-                data: formobject + "&subscriptionId=" + subscriptionId + "&planId=" + planId + "&operation=" + operation,
-                cache: false,
-                success: function (result) {
-                    $('#divIndex').html(result);
-                },
-                Error:
-                    function (result) {
-                        $('#divIndex').html(result);
-                    }
-            });
-        }
-        else {
+        if (!validateInputs()) {
             swal({
                 title: "Required",
                 text: "Please fill all required values",
                 icon: "warning"
             })
-
+            return
         }
-    }
-    /*
-     const forms = document.querySelectorAll('.needs-validation');
-     // Loop over them and prevent submission
-     Array.from(forms).forEach(form => {
-         form.addEventListener('submit', event => {
-             if (!form.checkValidity()) {
-                 event.preventDefault()
-                 event.stopPropagation()
-             }
+        if (!validateEmail()) {
+            swal({
+                title: "Required",
+                text: "Contact email is missing or invalid",
+                icon: "warning"
+            })
+            return 
+        }
+        const formObject = $('#frmIndex').serialize();
+        const csrftoken = $('input[name="__RequestVerificationToken"]').val();
 
-             form.classList.add('was-validated')
-         }, false)
-     */
-    function validate() {
-        $(':input[required]:visible').each(function () {
-            if ($(this).val() == "") //check loginc here
-                return false;
+        $.ajax({
+            url: '/Home/SubscriptionOperation',
+            type: 'POST',
+            headers: { RequestVerificationToken: csrftoken },
+            data: `${formObject}&subscriptionId=${subscriptionId}&planId=${planId}&operation=${operation}`,
+            cache: false,
+            success: function (result) {
+                $('#divIndex').html(result);
+            },
+            Error:
+                function (result) {
+                    $('#divIndex').html(result);
+                }
         });
-        return true;
     }
-
 </script>
